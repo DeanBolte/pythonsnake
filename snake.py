@@ -57,30 +57,30 @@ class GameBoard:
         # Begins moving the snake
         self.movement() 
 
-    def validLocation(location):
+    def validLocation(self, location):
         if(self.snakeBody[location[0]][location[1]] == 1):
             return False
         elif(location[0] >= rows or location[1] >= cols):
             return False
         return True
 
-    def newFruitLocation():
+    def newFruitLocation(self):
         # Create location
         location = (randint(0, rows - 1), randint(0, cols - 1))
-        while(validLocation(location) == False):
+        while(self.validLocation(location) == False):
             location = (randint(0, rows - 1), randint(0, cols - 1))
         
         print(location)
         return location
 
-    def move(x, y):
+    def move(self, x, y):
         if(self.validLocation((self.snakeHead[0] + x, self.snakeHead[1] + y))):
             self.snakeBody[self.snakeHead[0] + x][self.snakeHead[1] + y] = 1
 
-    def changeDirection(dir):
+    def changeDirection(self, dir):
         self.snakeDirection = dir
 
-    def movement():
+    def movement(self):
         #refresh fruit location
         self.fruitLocation = self.newFruitLocation()
 
@@ -100,15 +100,15 @@ class GameBoard:
 
         #move snake
         if(self.snakeDirection == "N"):
-            move(0, -1)
+            self.move(0, -1)
         elif(self.snakeDirection == "E"):
-            move(1, 0)
+            self.move(1, 0)
         elif(self.snakeDirection == "S"):
-            move(0, 1)
+            self.move(0, 1)
         elif(self.snakeDirection == "W"):
-            move(-1, 0)
+            self.move(-1, 0)
 
-        self.canvas.after(1000, movement)
+        self.canvas.after(1000, self.movement)
     
 if __name__ == "__main__": 
     # object of class Tk, resposible for creating 
