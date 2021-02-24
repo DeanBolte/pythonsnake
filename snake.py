@@ -58,9 +58,10 @@ class GameBoard:
         self.movement() 
 
     def validLocation(self, location):
-        if(self.snakeBody[location[1]][location[0]] == 1):
+        if(location[0] >= cols or location[1] >= rows
+        or location[0] < 0 or location[1] < 0):
             return False
-        elif(location[0] >= cols or location[1] >= rows):
+        elif(self.snakeBody[location[1]][location[0]] == 1):
             return False
         return True
 
@@ -75,9 +76,12 @@ class GameBoard:
     def move(self, x, y):
         moveX = self.snakeHead[0] + x
         moveY = self.snakeHead[1] + y
-        if(self.validLocation((moveY, moveX))):
+        if(self.validLocation((moveX, moveY))):
             self.snakeBody[moveY][moveX] = 1
             self.snakeHead = (moveX, moveY)
+            print(self.snakeHead)
+        else:
+            print("cannot move")
 
     def changeDirection(self, dir):
         self.snakeDirection = dir
@@ -107,7 +111,7 @@ class GameBoard:
         elif(self.snakeDirection == "W"):
             self.move(-1, 0)
 
-        self.canvas.after(100, self.movement)
+        self.canvas.after(400, self.movement)
     
 if __name__ == "__main__": 
     # object of class Tk, resposible for creating 
