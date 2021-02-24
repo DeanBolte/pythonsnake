@@ -46,6 +46,9 @@ class GameBoard:
         self.snakeBody = [[0]*cols for _ in range(rows)] #[[0 <= col, 0, 0] <= row, [0, 0, 0], [0, 0, 0]] [y][x] = [rows][cols]
         self.snakeDirection = "N"
 
+        # Points
+        self.points = 0
+
         # Starting location
         self.snakeBody[int(rows/2)][int(cols/2)] = 1
         self.snakeHead = (int(cols/2), int(rows/2))
@@ -60,9 +63,12 @@ class GameBoard:
     def validLocation(self, location):
         if(location[0] >= cols or location[1] >= rows
         or location[0] < 0 or location[1] < 0):
+            # Out of Bounds
             return False
         elif(self.snakeBody[location[1]][location[0]] == 1):
+            # Inside Snake
             return False
+        # Valid
         return True
 
     def newFruitLocation(self):
@@ -74,8 +80,16 @@ class GameBoard:
         return location
 
     def move(self, x, y):
+        # Coords to move to
         moveX = self.snakeHead[0] + x
         moveY = self.snakeHead[1] + y
+
+        # If fruit then eat
+        if(moveX == self.fruitLocation[0] and moveY == self.fruitLocation[1]):
+            self.fruitLocation = self.newFruitLocation()
+            self.points += 1
+
+        # Move to coords if valid
         if(self.validLocation((moveX, moveY))):
             self.snakeBody[moveY][moveX] = 1
             self.snakeHead = (moveX, moveY)
@@ -114,8 +128,6 @@ class GameBoard:
         self.canvas.after(400, self.movement)
     
 if __name__ == "__main__": 
-    # object of class Tk, resposible for creating 
-    # a tkinter toplevel window  
     gb = GameBoard(root)
   
     # This will bind arrow keys to the tkinter 
