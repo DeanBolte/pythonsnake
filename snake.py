@@ -12,10 +12,6 @@ colourSnake = "#44ff44"
 colourBack = "#bbbbcc"
 colourFruit = "#ff4444"
 
-#starting location
-snakeBody[int(rows/2)][int(cols/2)] = 1
-snakeHead = (int(rows/2), int(cols/2))
-
 # Setup
 root = Tk()
 
@@ -47,6 +43,10 @@ class GameBoard:
     snakeBody = [[0]*cols for _ in range(rows)]
     snakeDirection = "N"
 
+    # Starting location
+    snakeBody[int(rows/2)][int(cols/2)] = 1
+    snakeHead = (int(rows/2), int(cols/2))
+
     def validLocation(location):
         if(snakeBody[location[0]][location[1]] == 1):
             return False
@@ -66,6 +66,9 @@ class GameBoard:
     def move(x, y):
         if(validLocation((snakeHead[0] + x, snakeHead[1] + y))):
             snakeBody[snakeHead[0] + x][snakeHead[1] + y] = 1
+
+    def changeDirection(dir):
+        snakeDirection = dir
 
     # Game Board
     gameBoard = Canvas(root, bg="white", height=(300), width=(300))
@@ -100,5 +103,6 @@ class GameBoard:
             move(-1, 0)
     
 # Loop
-main()
+gameBoard = GameBoard()
+gameBoard.main()
 root.mainloop()
