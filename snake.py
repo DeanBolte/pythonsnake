@@ -43,12 +43,12 @@ class GameBoard:
 
         # Location Data
         self.fruitLocation = (2, 5)
-        self.snakeBody = [[0]*cols for _ in range(rows)]
+        self.snakeBody = [[0]*cols for _ in range(rows)] #[[0 <= col, 0, 0] <= row, [0, 0, 0], [0, 0, 0]] [y][x] = [rows][cols]
         self.snakeDirection = "N"
 
         # Starting location
         self.snakeBody[int(rows/2)][int(cols/2)] = 1
-        self.snakeHead = (int(rows/2), int(cols/2))
+        self.snakeHead = (int(cols/2), int(rows/2))
 
         # Game Board
         self.canvas = Canvas(root, bg="white", height=(300), width=(300))
@@ -58,9 +58,9 @@ class GameBoard:
         self.movement() 
 
     def validLocation(self, location):
-        if(self.snakeBody[location[0]][location[1]] == 1):
+        if(self.snakeBody[location[1]][location[0]] == 1):
             return False
-        elif(location[0] >= rows or location[1] >= cols):
+        elif(location[0] >= cols or location[1] >= rows):
             return False
         return True
 
@@ -70,20 +70,19 @@ class GameBoard:
         while(self.validLocation(location) == False):
             location = (randint(0, rows - 1), randint(0, cols - 1))
         
-        print(location)
         return location
 
     def move(self, x, y):
-        if(self.validLocation((self.snakeHead[0] + x, self.snakeHead[1] + y))):
-            self.snakeBody[self.snakeHead[0] + x][self.snakeHead[1] + y] = 1
+        moveX = self.snakeHead[0] + x
+        moveY = self.snakeHead[1] + y
+        if(self.validLocation((moveY, moveX))):
+            self.snakeBody[moveY][moveX] = 1
+            self.snakeHead = (moveX, moveY)
 
     def changeDirection(self, dir):
         self.snakeDirection = dir
 
     def movement(self):
-        #refresh fruit location
-        self.fruitLocation = self.newFruitLocation()
-
         #draw the board
         for row in range(rows):
             for col in range(cols):
@@ -108,7 +107,7 @@ class GameBoard:
         elif(self.snakeDirection == "W"):
             self.move(-1, 0)
 
-        self.canvas.after(1000, self.movement)
+        self.canvas.after(100, self.movement)
     
 if __name__ == "__main__": 
     # object of class Tk, resposible for creating 
