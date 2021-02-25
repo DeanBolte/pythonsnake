@@ -83,8 +83,8 @@ class GameBoard:
 
     def snakeDecay(self):
         for bodyPiece in self.snakeBodyLocations:
-            self.snakeBody[bodyPiece[0]][bodyPiece[1]] -= 1
-            if(self.snakeBody[bodyPiece[0]][bodyPiece[1]] <= 0):
+            self.snakeBody[bodyPiece[1]][bodyPiece[0]] -= 1
+            if(self.snakeBody[bodyPiece[1]][bodyPiece[0]] <= 0):
                 self.snakeBodyLocations.remove(bodyPiece)
 
     def move(self, x, y):
@@ -105,6 +105,7 @@ class GameBoard:
             #create new head
             self.snakeBody[moveY][moveX] = self.snakeSize
             self.snakeHead = (moveX, moveY)
+            self.snakeBodyLocations.append(self.snakeHead)
             print(self.snakeHead)
         else:
             print("cannot move")
