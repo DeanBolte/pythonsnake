@@ -48,10 +48,12 @@ class GameBoard:
 
         # Points
         self.points = 0
+        self.snakeSize = 3
 
         # Starting location
-        self.snakeBody[int(rows/2)][int(cols/2)] = 1
+        self.snakeBody[int(rows/2)][int(cols/2)] = self.snakeSize
         self.snakeHead = (int(cols/2), int(rows/2))
+        self.snakeBodyLocations = [self.snakeHead]
 
         # Game Board
         self.canvas = Canvas(root, bg="white", height=(300), width=(300))
@@ -79,6 +81,12 @@ class GameBoard:
         
         return location
 
+    def snakeDecay(self):
+        for bodyPiece in self.snakeBodyLocations:
+            self.snakeBody[bodyPiece[0]][bodyPiece[1]] -= 1
+            if(self.snakeBody[bodyPiece[0]][bodyPiece[1]] <= 0):
+                self.snakeBodyLocations.remove(bodyPiece)
+
     def move(self, x, y):
         # Coords to move to
         moveX = self.snakeHead[0] + x
@@ -88,10 +96,14 @@ class GameBoard:
         if(moveX == self.fruitLocation[0] and moveY == self.fruitLocation[1]):
             self.fruitLocation = self.newFruitLocation()
             self.points += 1
+            self.snakeSize += 1
 
         # Move to coords if valid
         if(self.validLocation((moveX, moveY))):
-            self.snakeBody[moveY][moveX] = 1
+            #tick down snake body values
+            self.snakeDecay()
+            #create new head
+            self.snakeBody[moveY][moveX] = self.snakeSize
             self.snakeHead = (moveX, moveY)
             print(self.snakeHead)
         else:
@@ -108,7 +120,7 @@ class GameBoard:
                 y1 = row * squareLength
                 x2 = (col + 1) * squareLength
                 y2 = (row + 1) * squareLength
-                if(self.snakeBody[row][col] == 1):
+                if(self.snakeBody[row][col] >= 1):
                     square = self.canvas.create_rectangle(x1, y1, x2, y2, fill=colourSnake, tags="area")
                 elif(row == self.fruitLocation[1] and col == self.fruitLocation[0]):
                     square = self.canvas.create_rectangle(x1, y1, x2, y2, fill=colourFruit, tags="area")
